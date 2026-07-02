@@ -2,7 +2,9 @@
 #include <iostream>
 #include <cctype>
 // Reproductor.cpp
-
+// ALGORITHM ES PARTE DE STL 
+// TO-DO 
+// CORREGIR
 
 
 // Limpia la consola
