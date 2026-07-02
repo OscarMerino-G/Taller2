@@ -1,6 +1,5 @@
 #include "../../include/nucleo/Reproductor.hpp"
 #include <iostream>
-#include <algorithm>
 #include <cctype>
 // Reproductor.cpp
 
