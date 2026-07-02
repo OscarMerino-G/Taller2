@@ -6,7 +6,7 @@ Oscar Merino
 > El proyecto es un reproductor que hace algo
 
 # Compilar con el siguiente codigo
-> g++ -std=c++14 main.cpp src/nucleo/*.cpp src/Clases/*.cpp src/Estructura_Datos/*.cpp -o reproductor.exe
+> g++ -std=c++14 Main.cpp src/nucleo/*.cpp src/clases/*.cpp src/estructura_datos/*.cpp -o reproductor.exe
 
 # Ejecutar con 
 > ./reproductor.exe
