@@ -1,7 +1,10 @@
 #include "../../include/clases/Playlist.hpp"
 #include <cstdlib>
 #include <ctime>
-// Playlist.cpp
+#include <vector>
+#include <iostream>
+
+
 Playlist::Playlist() : currentIndex(-1), shuffleMode(false), repeatMode(0) {
     srand(time(nullptr));
 }
@@ -11,14 +14,14 @@ Playlist::~Playlist() {
 }
 
 void Playlist::addSong(Song* song) {
-    songs.add(song);
+    songs.pushBack(song);
     if (currentIndex == -1) {
         currentIndex = 0;
     }
 }
 
 void Playlist::addSongAtEnd(Song* song) {
-    songs.addAtEnd(song);
+    songs.pushBack(song);
     if (currentIndex == -1) {
         currentIndex = 0;
     }
@@ -50,7 +53,7 @@ Song* Playlist::getCurrentSong() {
     if (isEmpty() || currentIndex < 0 || currentIndex >= songs.size()) {
         return nullptr;
     }
-    return songs.get(currentIndex);
+    return songs.at(currentIndex);
 }
 
 Song* Playlist::getNextSong() {
@@ -83,7 +86,7 @@ Song* Playlist::getNextSong() {
     return getCurrentSong();
 }
 
-Song* Playlist::getPreviousSong() {
+Song* Playlist::getPrevSong() {
     if (isEmpty()) return nullptr;
     
     if (shuffleMode) {
@@ -114,7 +117,7 @@ void Playlist::shuffle() {
     // Convertir a vector para mezclar
     std::vector<Song*> temp;
     for (int i = 0; i < songs.size(); i++) {
-        temp.push_back(songs.get(i));
+        temp.push_back(songs.at(i));
     }
     
     // Mezclar
@@ -128,7 +131,7 @@ void Playlist::shuffle() {
     // Reconstruir lista
     songs.clear();
     for (Song* song : temp) {
-        songs.add(song);
+        songs.pushBack(song);
     }
     
     currentIndex = 0;
@@ -163,13 +166,13 @@ bool Playlist::isEmpty() const {
 
 Song* Playlist::getSongAt(int index) {
     if (index < 0 || index >= songs.size()) return nullptr;
-    return songs.get(index);
+    return songs.at(index);
 }
 
 std::vector<Song*> Playlist::getAllSongs() {
     std::vector<Song*> result;
     for (int i = 0; i < songs.size(); i++) {
-        result.push_back(songs.get(i));
+        result.push_back(songs.at(i));
     }
     return result;
 }
@@ -182,7 +185,7 @@ void Playlist::displayPlaylist() const {
     
     std::cout << "\n=== LISTA DE REPRODUCCIÓN ===" << std::endl;
     for (int i = 0; i < songs.size(); i++) {
-        std::cout << i + 1 << ". " << songs.get(i)->toString();
+        std::cout << i + 1 << ". " << songs.at(i)->toString();
         if (i == currentIndex) {
             std::cout << " (Reproduciendo)";
         }

@@ -1,6 +1,8 @@
 #include "../../include/nucleo/Reproductor.hpp"
 #include <iostream>
 #include <cctype>
+#include <vector>
+#include <map>
 // Reproductor.cpp
 // ALGORITHM ES PARTE DE STL 
 // TO-DO 
@@ -27,11 +29,11 @@ Reproductor::Reproductor() : isPlaying(false), currentSong(nullptr) {
     // Si hay canciones, agregar todas a la playlist
     LinkedList<Song*>& songs = libreria.getSongsList();
     for (int i = 0; i < songs.size(); i++) {
-        playlist.addSong(songs.get(i));
+        playlist.addSong(songs.at(i));
     }
     
     // Actualizar heaps
-    updateHeaps();
+    //updateHeaps();
 }
 
 Reproductor::~Reproductor() {
@@ -40,10 +42,11 @@ Reproductor::~Reproductor() {
 
 void Reproductor::initializeDataStructures() {
     // Inicializar heaps
-    songHeap = Heap<Song*>(false); // Max heap
-    artistasHeap = Heap<std::pair<int, std::string>>(false); // Max heap
+    //songHeap = Heap<Song*>(false); // Max heap
+    //artistasHeap = Heap<std::pair<int, std::string>>(false); // Max heap
 }
 
+/*
 void Reproductor::updateHeaps() {
     // Limpiar heaps
     songHeap.clear();
@@ -52,7 +55,7 @@ void Reproductor::updateHeaps() {
     // Actualizar heap de canciones
     LinkedList<Song*>& songs = libreria.getSongsList();
     for (int i = 0; i < songs.size(); i++) {
-        Song* song = songs.get(i);
+        Song* song = songs.at(i);
         if (song->getPlayCount() > 0) {
             songHeap.push(song);
         }
@@ -61,9 +64,9 @@ void Reproductor::updateHeaps() {
     // Actualizar heap de artistas
     std::map<std::string, int> artistasCounts;
     for (int i = 0; i < songs.size(); i++) {
-        Song* song = songs.get(i);
+        Song* song = songs.at(i);
         if (song->getPlayCount() > 0) {
-            artistasCounts[song->getartistas()] += song->getPlayCount();
+            artistasCounts[song->getArtista()] += song->getPlayCount();
         }
     }
     
@@ -71,14 +74,14 @@ void Reproductor::updateHeaps() {
         artistasHeap.push(std::make_pair(pair.second, pair.first));
     }
 }
-
+*/
 void Reproductor::playSong(Song* song) {
     if (song == nullptr) return;
     
     currentSong = song;
     isPlaying = true;
     libreria.incrementPlayCount(song);
-    updateHeaps();
+    //updateHeaps();
     
     std::cout << "Reproduciendo: " << song->toString() << std::endl;
 }
@@ -169,7 +172,7 @@ void Reproductor::searchSongs() {
         }
     }
 }
-
+/*
 void Reproductor::showTopSongs() {
     clearScreen();
     
@@ -231,7 +234,7 @@ void Reproductor::showTopSongs() {
 void Reproductor::showTopartistass() {
     clearScreen();
     
-    std::vector<std::pair<int, std::string>> topartistass = artistasHeap.getTopN(10);
+    std::vector<std::pair<int, std::string>> topartistass = artistHeap.getTopN(10);
     
     if (topartistass.empty()) {
         std::cout << "No hay artistas reproducidos para mostrar." << std::endl;
@@ -297,7 +300,7 @@ void Reproductor::showartistasSongs(const std::string& artistas) {
     
     std::cout << "\n=== Canciones de " << artistas << " ===" << std::endl;
     for (int i = 0; i < songs.size(); i++) {
-        std::cout << i + 1 << ". " << songs[i]->getTitle() << std::endl;
+        std::cout << i + 1 << ". " << songs[i]->getTitulo() << std::endl;
     }
     
     std::cout << "\nOpciones:" << std::endl;
@@ -339,7 +342,7 @@ void Reproductor::showartistasSongs(const std::string& artistas) {
         std::cout << "Opción inválida" << std::endl;
     }
 }
-
+*/
 void Reproductor::togglePlayPause() {
     if (currentSong == nullptr) {
         // Seleccionar primera canción de la playlist
@@ -370,7 +373,7 @@ void Reproductor::nextSong() {
 }
 
 void Reproductor::previousSong() {
-    Song* prev = playlist.getPreviousSong();
+    Song* prev = playlist.getPrevSong();
     if (prev != nullptr) {
         playSong(prev);
     }
@@ -414,7 +417,7 @@ void Reproductor::displayMenu() {
     std::cout << "\n";
     if (currentSong != nullptr) {
         std::cout << "Reproduciendo: " << currentSong->toString() << std::endl;
-        std::cout << "artistasa: " << currentSong->getartistas() << std::endl;
+        std::cout << "artistasa: " << currentSong->getArtista() << std::endl;
         std::cout << "Album: " << currentSong->getAlbum() << " [" << currentSong->getYear() << "]" << std::endl;
         std::cout << "Estado: " << (isPlaying ? "▶ Reproduciendo" : "⏸ Pausado") << std::endl;
     } else {
@@ -473,7 +476,7 @@ void Reproductor::run() {
                 searchSongs();
                 break;
             case 'T':
-                showTopSongs();
+                //showTopSongs();
                 break;
             case 'X':
                 std::cout << "Saliendo del reproductor..." << std::endl;

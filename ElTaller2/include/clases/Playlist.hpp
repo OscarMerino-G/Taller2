@@ -1,5 +1,6 @@
 #ifndef PLAYLIST_HPP
 #define PLAYLIST_HPP
+#include <vector>
 #include "../../include/estructura_datos/LinkedList.hpp"
 // Playlist.h
 #include "Song.hpp"

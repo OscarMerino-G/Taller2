@@ -10,14 +10,14 @@ class Reproductor{
 private:
     MusicLibrery libreria;
     Playlist playlist;
-    Heap<Song*> songHeap;    // Para Top 10 canciones
-    Heap<std::pair<int, std::string>> artistHeap; // Para Top 10 arTistas
+    // Heap<Song*> songHeap;    // Para Top 10 canciones
+    // Heap<std::pair<int, std::string>> artistHeap; // Para Top 10 arTistas
     
     bool isPlaying;
     Song* currentSong;
     
     void initializeDataStructures();
-    void updateHeaps();
+    //void updateHeaps();
     void displayMenu();
 
 public:
@@ -32,9 +32,9 @@ public:
     
     // Funciones
     void searchSongs();
-    void showTopSongs();
-    void showTopArtistas();
-    void showArtistasongs(const std::string& artist);
+    //void showTopSongs();
+    //void showTopArtistas();
+    //void showArtistasongs(const std::string& artist);
     
     // Control de reproducción
     void togglePlayPause();
