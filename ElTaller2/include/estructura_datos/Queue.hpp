@@ -1,6 +1,6 @@
 #ifndef QUEUE_HPP
 #define QUEUE_HPP
-
+#include "../../src/estructura_datos/Queue.cpp"
 #include "LinkedList.hpp"
 
 template <typename T>
@@ -33,5 +33,5 @@ public:
     const LinkedList<T>& getList() const;
 };
 
-#include "../../src/Estructura_Datos/Queue.cpp"
+
 #endif
