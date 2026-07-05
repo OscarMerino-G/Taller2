@@ -1,6 +1,6 @@
 #ifndef STACK_HPP
 #define STACK_HPP
-
+#include "../../src/estructura_datos/Stack.cpp"
 #include "LinkedList.hpp"
 
 template <typename T>
@@ -22,5 +22,5 @@ public:
     const T& top() const;
 };
 
-#include "../../src/Estructura_Datos/Stack.cpp"
+
 #endif
