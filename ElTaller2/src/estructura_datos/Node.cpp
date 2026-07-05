@@ -1,7 +1,7 @@
 #ifndef NODE_CPP
 #define NODE_CPP
 
-#include "../../include/Estructura_Datos/Node.hpp"
+#include "../../include/estructura_datos/Node.hpp"
 
 template <typename T>
 Node<T>::Node() : next(nullptr), prev(nullptr) {}
