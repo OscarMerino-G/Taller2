@@ -1,7 +1,7 @@
 #ifndef QUEUE_CPP
 #define QUEUE_CPP
 
-#include "../../include/Estructura_Datos/Queue.hpp"
+#include "../../include/estructura_datos/Queue.hpp"
 
 template <typename T>
 Queue<T>::Queue() {}
