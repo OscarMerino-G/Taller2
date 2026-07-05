@@ -1,6 +1,6 @@
 #ifndef NODE_HPP
 #define NODE_HPP
-
+#include "../../src/estructura_datos/Node.cpp"
 template <typename T>
 class Node {
 public:
@@ -18,5 +18,5 @@ public:
     ~Node();
 };
 
-#include "../../src/Estructura_Datos/Node.cpp"
+
 #endif
