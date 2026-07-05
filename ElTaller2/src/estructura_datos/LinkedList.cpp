@@ -1,7 +1,7 @@
 #ifndef LINKEDLIST_CPP
 #define LINKEDLIST_CPP
 
-#include "../../include/Estructura_Datos/LinkedList.hpp"
+#include "../../include/estructura_datos/LinkedList.hpp"
 #include <cstdlib>
 #include <ctime>
 
