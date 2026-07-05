@@ -1,7 +1,7 @@
 #ifndef STACK_CPP
 #define STACK_CPP
 
-#include "../../include/Estructura_Datos/Stack.hpp"
+#include "../../include/estructura_datos/Stack.hpp"
 
 template <typename T>
 Stack<T>::Stack() {}
