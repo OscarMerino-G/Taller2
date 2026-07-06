@@ -6,14 +6,24 @@
 #include <cstdlib>
 #include <ctime>
 // Player.cpp
-Player::Player() : needsSave(false) {
+Player::Player() : songHeap(nullptr), artistHeap(nullptr), needsSave(false) {
     srand(time(nullptr));
+    // Inicializar heaps
+    songHeap = new Heap(false); // Max heap canciones
+    artistHeap = new Heap(false); // Max heap artistas
 }
 
+
 Player::~Player() {
-	delete songHeap;
-	delete artistHeap;
     saveIfNeeded();
+    if (songHeap != nullptr) {
+        delete songHeap;
+        songHeap = nullptr;
+    }
+    if (artistHeap != nullptr) {
+        delete artistHeap;
+        artistHeap = nullptr;
+    }
 }
 // limpia la consola
 void clearScreen() {
@@ -78,13 +88,21 @@ void Player::initializeDataStructures() {
 // actualizar estructuras de busquefda
 void Player::updateSearchStructures() {
     searchTrie.clear();
-    songHeap->clear();
-    artistHeap->clear();
+    
+    // Limpiar y reconstruir heaps
+    if (songHeap != nullptr) {
+        songHeap->clear();
+    }
+    if (artistHeap != nullptr) {
+        artistHeap->clear();
+    }
     
     Node<Song>* current = library.getAllSongs().getHead();
     while (current != nullptr) {
         searchTrie.insertSong(&(current->data));
-        songHeap->insert(&(current->data));
+        if (songHeap != nullptr) {
+            songHeap->insert(&(current->data));
+        }
         current = current->next;
     }
 }
@@ -490,7 +508,12 @@ void Player::playSong(Song* song) {
 //muestra top canciones
 void Player::showTopSongs() {
     clearScreen();
-    
+    if (songHeap == nullptr) {
+        std::cout << "Error: Heap no inicializado." << std::endl;
+        std::cout << "Presione Enter para continuar...";
+        std::cin.get();
+        return;
+    }
     LinkedList<Song*> topSongs = songHeap->getTopN(10);
     
     if (topSongs.isEmpty()) {
@@ -502,12 +525,12 @@ void Player::showTopSongs() {
     
     std::cout << "\n=== TOP 10 Canciones más escuchadas ===" << std::endl;
     
-    // Mostrar canciones usando iteración segura
+    // Mostrar canciones
     Node<Song*>* current = topSongs.getHead();
     int index = 1;
     while (current != nullptr) {
         std::cout << index << ". [" << current->data->getPlayCount() << "] " 
-                  << current->data->toString() << std::endl;
+                  << current->data->getDisplayString() << std::endl;
         current = current->next;
         index++;
     }
@@ -515,7 +538,7 @@ void Player::showTopSongs() {
     std::cout << "\nOpciones:" << std::endl;
     std::cout << "  R<num> - Reproducir canción seleccionada" << std::endl;
     std::cout << "  A<num> - Agregar canción seleccionada al final de la playlist actual" << std::endl;
-    std::cout << "  A - Top 10 artistas más escuchados" << std::endl;
+    std::cout << "  C - Top 10 artistas más escuchados" << std::endl;
     std::cout << "  V - Volver al menú principal" << std::endl;
     std::cout << "Ingrese Opción: ";
     
@@ -524,53 +547,41 @@ void Player::showTopSongs() {
     
     if (option == "V" || option == "v") {
         return;
-    } else if (option == "A" || option == "a") {
+    } else if (option == "C" || option == "c") {
         showTopArtists();
         return;
     } else if (option.length() > 1) {
         char action = option[0];
         std::string numStr = option.substr(1);
         
-        try {
-            int num = std::stoi(numStr);
+        int num = std::atoi(numStr.c_str());
+        if (num > 0 && num <= static_cast<int>(topSongs.size())) {
+            Node<Song*>* node = topSongs.getHead();
+            for (int i = 1; i < num; i++) {
+                if (node == nullptr) break;
+                node = node->next;
+            }
             
-            // Validar que el número esté en rango
-            if (num > 0 && num <= topSongs.size()) {
-                // Obtener el nodo correspondiente
-                Node<Song*>* node = topSongs.getHead();
-                for (int i = 1; i < num; i++) {
-                    node = node->next;
-                }
-                
+            if (node != nullptr) {
                 if (action == 'R' || action == 'r') {
                     playSong(node->data);
                     std::cout << "Reproduciendo canción seleccionada..." << std::endl;
                     std::cin.get();
                 } else if (action == 'A' || action == 'a') {
                     addSongToPlaylist(node->data);
-                    needsSave = true;
                     std::cout << "Canción agregada al final de la playlist actual" << std::endl;
                     std::cin.get();
                 } else {
                     std::cout << "Opción inválida. Use R para reproducir o A para agregar." << std::endl;
                     std::cin.get();
                 }
-            } else {
-                std::cout << "Índice fuera de rango. Debe ser entre 1 y " << topSongs.size() << std::endl;
-                std::cin.get();
             }
-        } catch (const std::invalid_argument& e) {
-            std::cout << "Error: El número ingresado no es válido." << std::endl;
-            std::cin.get();
-        } catch (const std::out_of_range& e) {
-            std::cout << "Error: El número ingresado es demasiado grande." << std::endl;
-            std::cin.get();
-        } catch (...) {
-            std::cout << "Error inesperado al procesar la opción." << std::endl;
+        } else {
+            std::cout << "Índice fuera de rango. Debe ser entre 1 y " << topSongs.size() << std::endl;
             std::cin.get();
         }
     } else {
-        std::cout << "Opción inválida. Use R<num>, A<num>, A o V." << std::endl;
+        std::cout << "Opción inválida. Use R<num>, A<num>, C o V." << std::endl;
         std::cin.get();
     }
 }
@@ -678,6 +689,14 @@ void Player::showArtistSongs(const std::string& artistName) {
 void Player::showTopArtists() {
     clearScreen();
     
+    // Verificar que songHeap esté inicializado
+    if (songHeap == nullptr) {
+        std::cout << "Error: Heap no inicializado." << std::endl;
+        std::cout << "Presione Enter para continuar...";
+        std::cin.get();
+        return;
+    }
+    
     LinkedList<std::pair<int, std::string>> topArtists = songHeap->getTopArtists(10);
     
     if (topArtists.isEmpty()) {
@@ -687,7 +706,7 @@ void Player::showTopArtists() {
         return;
     }
     
-    std::cout << "\nRanking TOP 10 Artistas más escuchados:" << std::endl;
+    std::cout << "\n=== TOP 10 Artistas más escuchados ===" << std::endl;
     Node<std::pair<int, std::string>>* current = topArtists.getHead();
     int index = 1;
     while (current != nullptr) {
@@ -716,17 +735,20 @@ void Player::showTopArtists() {
         std::string numStr = option.substr(1);
         
         int num = std::atoi(numStr.c_str());
-        if (num > 0 && num <= topArtists.size()) {
+        if (num > 0 && num <= static_cast<int>(topArtists.size())) {
             Node<std::pair<int, std::string>>* node = topArtists.getHead();
             for (int i = 1; i < num; i++) {
+                if (node == nullptr) break;
                 node = node->next;
             }
             
-            if (action == 'S' || action == 's') {
-                showArtistSongs(node->data.second);
-            } else {
-                std::cout << "Opción inválida" << std::endl;
-                std::cin.get();
+            if (node != nullptr) {
+                if (action == 'S' || action == 's') {
+                    showArtistSongs(node->data.second);
+                } else {
+                    std::cout << "Opción inválida" << std::endl;
+                    std::cin.get();
+                }
             }
         } else {
             std::cout << "Número inválido" << std::endl;
