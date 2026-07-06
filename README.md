@@ -9,4 +9,4 @@ Oscar Merino
 > g++ -std=c++14 main.cpp src/nucleo/*.cpp src/clases/*.cpp src/Estructura_Datos/*.cpp -o reproductor.exe
 
 # Ejecutar con 
-> ./reproductor.exe
+> reproductor.exe
