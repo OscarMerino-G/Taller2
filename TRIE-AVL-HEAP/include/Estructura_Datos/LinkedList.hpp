@@ -1,6 +1,5 @@
 #ifndef LINKEDLIST_HPP
 #define LINKEDLIST_HPP
-#include "../../src/Estructura_Datos/LinkedList.cpp"
 #include "Node.hpp"
 #include <cstddef>
 
@@ -28,6 +27,9 @@ public:
     const T& back() const;
     T& at(size_t index);
 	const T& at(size_t index) const;
+	
+	T& operator[](size_t index);
+	const T& operator[](size_t index) const;
     
     Node<T>* getNodeAt(size_t index) const;
     

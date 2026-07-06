@@ -1,6 +1,7 @@
 #ifndef LINKEDLIST_CPP
 #define LINKEDLIST_CPP
 // LinkedList.cpp
+
 #include "../../include/Estructura_Datos/LinkedList.hpp"
 #include <cstdlib>
 #include <ctime>
@@ -64,6 +65,16 @@ Node<T>* LinkedList<T>::getNodeAt(size_t index) const {
 template <typename T>
 T& LinkedList<T>::at(size_t index) {
     return getNodeAt(index)->data;
+}
+
+template <typename T>
+T& LinkedList<T>::operator[](size_t index) {
+    return at(index);
+}
+
+template <typename T>
+const T& LinkedList<T>::operator[](size_t index) const {
+    return at(index);
 }
 
 template <typename T>

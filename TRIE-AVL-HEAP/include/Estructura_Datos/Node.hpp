@@ -1,6 +1,7 @@
 #ifndef NODE_HPP
 #define NODE_HPP
-#include "../../src/Estructura_Datos/Node.cpp"
+#include <cstddef>
+
 template <typename T>
 struct Node {
     T data;
@@ -28,5 +29,5 @@ Node<T>::~Node() {
     next = nullptr;
     prev = nullptr;
 }
-
+#include "../../src/Estructura_Datos/Node.cpp"
 #endif

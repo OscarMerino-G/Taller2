@@ -1,6 +1,7 @@
 #ifndef HEAP_HPP
 #define HEAP_HPP
 #include "../Clases/Song.hpp"
+#include "LinkedList.hpp"
 // Heap.hpp
 class Heap {
 private:

@@ -24,8 +24,8 @@ public:
     static bool loadStatus(const std::string& filename, PlayerStatus& status, Playlist& playlist);
     static bool saveStatus(const std::string& filename, const PlayerStatus& status, const Playlist& playlist);
     
-	static bool FileManager::loadPlayCounts(const std::string& filename, MusicLibrary& library);
-	static bool FileManager::savePlayCounts(const std::string& filename, const MusicLibrary& library);
+	static bool loadPlayCounts(const std::string& filename, MusicLibrary& library);
+	static bool savePlayCounts(const std::string& filename, const MusicLibrary& library);
 	
     static bool loadPlaylistFromIds(const std::string& idsStr, MusicLibrary& library, Playlist& playlist);
     static std::string savePlaylistToIds(const Playlist& playlist);

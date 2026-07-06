@@ -135,37 +135,56 @@ LinkedList<Song*> Heap::getTopN(int n) {
     
     if (size == 0) return result;
     
-    // crear copia del heap para no modificar el original |
+    // Crear copia del heap para no modificar el original
     Heap tempHeap = *this;
     
-    int count = (n < size) ? n : size;
-    for (int i = 0; i < count; i++) {
-        if (tempHeap.size > 0) {
-            Song* top = tempHeap.heapArray[0];
-            result.pushBack(top);
-            
-            // quitar el elemento del heap temporal |
-            tempHeap.heapArray[0] = tempHeap.heapArray[tempHeap.size - 1];
-            tempHeap.size--;
-            tempHeap.heapifyDown(0);
+    // Crear un arreglo temporal para almacenar los elementos extraídos
+    Song** tempArray = new Song*[n];
+    int count = 0;
+    
+    while (count < n && tempHeap.size > 0) {
+        Song* top = tempHeap.heapArray[0];
+        tempArray[count] = top;
+        count++;
+        
+        // Quitar el elemento del heap temporal
+        tempHeap.heapArray[0] = tempHeap.heapArray[tempHeap.size - 1];
+        tempHeap.size--;
+        tempHeap.heapifyDown(0);
+    }
+    
+    // Ordenar los elementos extraídos por playCount (descendente)
+    for (int i = 0; i < count - 1; i++) {
+        for (int j = i + 1; j < count; j++) {
+            if (tempArray[i]->getPlayCount() < tempArray[j]->getPlayCount()) {
+                Song* temp = tempArray[i];
+                tempArray[i] = tempArray[j];
+                tempArray[j] = temp;
+            }
         }
     }
     
+    // Agregar al resultado
+    for (int i = 0; i < count; i++) {
+        result.pushBack(tempArray[i]);
+    }
+    
+    delete[] tempArray;
     return result;
 }
-
+// obtener top artistas
 LinkedList<std::pair<int, std::string>> Heap::getTopArtists(int n) {
     LinkedList<std::pair<int, std::string>> result;
     
     if (size == 0) return result;
     
-    // recorer todas las canciones para acumular reproducciones por artista
+    // Recorrer todas las canciones para acumular reproducciones por artista
     struct ArtistCount {
         std::string name;
         int count;
     };
     
-    // temp array para almacenar artistas
+    // Arreglo temporal para almacenar artistas
     ArtistCount* artists = new ArtistCount[size];
     int artistCount = 0;
     
@@ -190,7 +209,7 @@ LinkedList<std::pair<int, std::string>> Heap::getTopArtists(int n) {
         }
     }
     
-    // Ordenamos los artistas por count (descendente) y alfabéticamente
+    // Ordenar artistas por count (descendente) y alfabéticamente
     for (int i = 0; i < artistCount - 1; i++) {
         for (int j = i + 1; j < artistCount; j++) {
             bool shouldSwap = (artists[i].count < artists[j].count) ||
@@ -212,7 +231,6 @@ LinkedList<std::pair<int, std::string>> Heap::getTopArtists(int n) {
     delete[] artists;
     return result;
 }
-
 bool Heap::isEmpty() const {
     return size == 0;
 }

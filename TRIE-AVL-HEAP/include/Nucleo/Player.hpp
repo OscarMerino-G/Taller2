@@ -14,8 +14,8 @@ private:
     Playlist playlist;
     Stack<Song> history;  // Historial de canciones
 	Trie searchTrie;
-    Heap songHeap;      // Max-heap para top canciones
-    Heap artistHeap;    // Min-heap para top artistas
+    Heap* songHeap;      // Max-heap para top canciones
+    Heap* artistHeap;    // Min-heap para top artistas
     
     PlayerStatus status;
     
@@ -27,22 +27,14 @@ private:
     void updateHeapWithSong(Song* song);
     void playSong(Song* song);  // Método auxiliar
     void incrementSongPlayCount(Song* song);
-    
-public:
-	MusicLibrary library;
-    Player();
-    ~Player();
 	
-    void showTopSongs();        // Top 10 canciones
-    void showTopArtists();      // Top 10 artistas
-    void showArtistSongs(const std::string& artistName);
-    void searchSongs();         // Búsqueda con Trie
-    
-    bool initialize();
-    void run();
-    void updateSearchStructures();  // Reconstruye Trie y Heap
+	void initializeDataStructures();
 	
-private:
+	void showTopArtists();
+	void addSongToPlaylist(Song* song);
+	void addSongToPlaylist(int index);
+    void showTopSongs();
+	
     void displayMainMenu() const;
     void displayNowPlaying() const;
     void handleMainMenuInput(char option);
@@ -65,7 +57,6 @@ private:
     void displaySongList() const;
     void handleSongListMenu();
     void playSpecificSong(int index);
-    void addSongToPlaylist(int index);
     void addNewSong();
     void deleteSong(int index);
     
@@ -73,6 +64,21 @@ private:
     int getInputNumber(const std::string& prefix) const;
     std::string getInputString(const std::string& prompt) const;
     int getInputInt(const std::string& prompt) const;
+	
+public:
+	MusicLibrary library;
+    Player();
+    ~Player();
+	
+    //void showTopSongs();        // Top 10 canciones
+    //void showTopArtists();      // Top 10 artistas
+    void showArtistSongs(const std::string& artistName);
+    void searchSongs();         // Búsqueda con Trie
+    
+    bool initialize();
+    void run();
+    void updateSearchStructures();  // Reconstruye Trie y Heap
+	
 };
 
 #endif
