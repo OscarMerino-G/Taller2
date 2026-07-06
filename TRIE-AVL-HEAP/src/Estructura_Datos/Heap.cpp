@@ -132,46 +132,35 @@ void Heap::insert(Song* song) {
 
 LinkedList<Song*> Heap::getTopN(int n) {
     LinkedList<Song*> result;
-    
-    if (size == 0) return result;
-    
-    // Crear copia del heap para no modificar el original
-    Heap tempHeap = *this;
-    
-    // Crear un arreglo temporal para almacenar los elementos extraídos
-    Song** tempArray = new Song*[n];
-    int count = 0;
-    
-    while (count < n && tempHeap.size > 0) {
-        Song* top = tempHeap.heapArray[0];
-        tempArray[count] = top;
-        count++;
-        
-        // Quitar el elemento del heap temporal
-        tempHeap.heapArray[0] = tempHeap.heapArray[tempHeap.size - 1];
-        tempHeap.size--;
-        tempHeap.heapifyDown(0);
+
+    if (size == 0 || n <= 0) {
+        return result;
     }
-    
-    // Ordenar los elementos extraídos por playCount (descendente)
-    for (int i = 0; i < count - 1; i++) {
-        for (int j = i + 1; j < count; j++) {
-            if (tempArray[i]->getPlayCount() < tempArray[j]->getPlayCount()) {
-                Song* temp = tempArray[i];
-                tempArray[i] = tempArray[j];
-                tempArray[j] = temp;
-            }
+
+    Heap tempHeap(isMinHeap);
+
+    for (int i = 0; i < size; i++) {
+        tempHeap.insert(heapArray[i]);
+    }
+
+    int count = (n < size) ? n : size;
+
+    for (int i = 0; i < count; i++) {
+        Song* top = tempHeap.heapArray[0];
+        result.pushBack(top);
+
+        tempHeap.heapArray[0] = tempHeap.heapArray[tempHeap.size - 1];
+        tempHeap.heapArray[tempHeap.size - 1] = nullptr;
+        tempHeap.size--;
+
+        if (tempHeap.size > 0) {
+            tempHeap.heapifyDown(0);
         }
     }
-    
-    // Agregar al resultado
-    for (int i = 0; i < count; i++) {
-        result.pushBack(tempArray[i]);
-    }
-    
-    delete[] tempArray;
+
     return result;
 }
+
 // obtener top artistas
 LinkedList<std::pair<int, std::string>> Heap::getTopArtists(int n) {
     LinkedList<std::pair<int, std::string>> result;
