@@ -31,7 +31,7 @@ public:
     
     Node<T>* getNodeAt(size_t index) const;
     
-	void swapAt(size_t i, size_t j)
+	void swapAt(size_t i, size_t j);
     void pushFront(const T& data); // Insercion
     void pushBack(const T& data);
     void insertAt(size_t index, const T& data);
