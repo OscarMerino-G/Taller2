@@ -7,6 +7,7 @@ Oscar Merino
 
 # Compilar con el siguiente codigo
 > g++ -std=c++14 main.cpp src/nucleo/* .cpp src/clases/* .cpp src/Estructura_Datos/* .cpp -o reproductor.exe
+
 > (quitar espacios despues de asteriscos)
 
 # Ejecutar con 
