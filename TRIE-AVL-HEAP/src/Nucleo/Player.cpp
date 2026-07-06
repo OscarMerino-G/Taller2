@@ -196,7 +196,7 @@ void Player::handleMainMenuInput(char option) {
         case 'L': case 'l':
             showSongListMenu();
             break;
-		case 'F': case 'f':
+		case 'B': case 'b':
 			searchSongs();
 			break;
 		case 'T': case 't':
